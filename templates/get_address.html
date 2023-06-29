@@ -1,0 +1,63 @@
+<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    function findAddr() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                var addr = '';
+                
+                if (data.userSelectedType === 'R') {
+                    addr = data.roadAddress;
+                } else {
+                    addr = data.jibunAddress;
+                }
+                
+                document.getElementById("c_main_address").value = addr;
+                
+                // 주소값을 가져와서 폼 데이터에 추가
+                var form = document.getElementById("addressForm");
+                var addressInput = document.getElementById("c_main_address");
+                var csrfInput = document.getElementsByName("csrfmiddlewaretoken")[0];
+                
+                // 폼 데이터에 주소값과 CSRF 토큰 추가
+                var formData = new FormData(form);
+                formData.append("address", addressInput.value);
+                formData.append("csrfmiddlewaretoken", csrfInput.value);
+                
+                // AJAX를 사용하여 POST 요청 전송
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "{% url 'walker:address' %}", true);
+                xhr.send(formData);
+            }
+        }).open();
+    }
+    
+    document.getElementById("addressSearch").addEventListener("click", findAddr);
+</script>
+<form method="post" action="{% url 'walker:address' %}" id="addressForm">
+  {% csrf_token %}
+  <label for="c_main_address">주소</label>
+  <input type="text" id="c_main_address" name="address" placeholder="배송받을 주소를 검색해주세요" readonly>
+  <button type="button" id="addressSearch" onclick="findAddr()">주소 검색</button>
+  <button type="submit">저장</button>
+</form>
+<!-- <script>
+	// findAddr() 함수 정의
+	function findAddr() {
+		new daum.Postcode({
+        	oncomplete: function(data) {
+            	// 사용자 주소를 받아올 변수를 정의한다.
+                var addr = '';
+                
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우(R)
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+                
+                // 부모창의 주소칸에 받아온 주소를 넣는다.
+                $("#c_main_address").val(addr);
+        	}
+     	}).open();
+	}
+</script> -->

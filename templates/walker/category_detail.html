@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% if restaurant_list %}
+{% for restaurant in restaurant_list %}
+<div class="col-sm-6" ng-repeat="restaurant in list">
+  <div class="item clearfix" ng-click="select_restaurant(restaurant, $index)">
+    <table>
+      <tbody><tr>
+        <td>
+          <div ng-show="restaurant|restaurant_is_available" class="logo" ng-style="{'background-image':'url(' + get_logo_url(restaurant.logo_url) + '), url(\'image/default_restaurant_logo.png\')'}" style="background-image: url(&quot;https://rev-static.yogiyo.co.kr/franchise_logos/버거킹_20210609_Franchise_crop_200x200.jpg&quot;), url(&quot;image/default_restaurant_logo.png&quot;);"></div>
+          <div ng-show="! (restaurant|restaurant_is_available)" class="logo not-available ng-binding ng-hide">현재<br>서비스가<br>제공되지<br>않습니다.</div>
+        </td>
+        <td>
+          <div class="restaurants-info">
+            <div class="restaurant-name ng-binding">{{ restaurant.상호명 }}</div>
+            <ul>
+              <li class="full-w">
+                <span class="coupon-base ng-binding">{{ restaurant.id }}</span>
+                <form method="post" action="{% url 'walker:purchase' %}">
+                  {% csrf_token %}
+                  <input type="hidden" name="restaurant_id" value="{{ restaurant.id }}">
+                  <button type="submit" class="coupon-base coupon-style1 ng-binding ng-hide">구매하기</button>
+                </form>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+    </tbody></table>
+  </div>
+</div>
+{% endfor %}
+{% endif %}
+  <!-- 페이징 처리 시작 -->
+  <ul class="pagination justify-content-center">
+    <!-- 이전 페이지 -->
+    {% if restaurant_list.has_previous %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ question_list.previous_page_number }}">
+        이전
+      </a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" tabindex="-1" aria-disabled="true" href="#">
+        이전
+      </a>
+    </li>
+    {% endif %}
+    <!-- 페이지 리스트 -->
+    {% for page_number in restaurant_list.paginator.page_range %}
+    <!-- 현재 페이지 좌우 5개씩 보이게 -->
+    {% if page_number >= restaurant_list.number|add:-5 and page_number <= restaurant_list.number|add:5 %}
+    {% if page_number == restaurant_list.number %}
+    <li class="page-item active" aria-current="page">
+      <a class="page-link" href="?page= {{ page_number }}">
+        {{ page_number }}
+      </a>
+    </li>
+    {% else %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ page_number }}">
+        {{ page_number }}
+      </a>
+    </li>
+    {% endif %}
+    {% endif %}
+    {% endfor %}
+    <!-- 다음 페이지 -->
+    {% if restaurant_list.has_next %}
+    <li class="page-item">
+      <a class="page-link" href="?page={{ restaurant_list.next_page_number }}">
+        다음
+      </a>
+    </li>
+    {% else %}
+    <li class="page-item disabled">
+      <a class="page-link" tabindex="-1" aria-disabled="true" href="#">
+        다음
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+  <!-- 페이징 처리 끝 -->
+
+<!-- <div class="container my-3">
+  <table class="table">
+    <thead>
+      <tr class="thead-dark">
+        <th>id</th>
+        <th>상호명</th>
+        <th>구매</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if restaurant_list %}
+      {% for restaurant in restaurant_list %}
+      <tr>
+        <td> {{ restaurant.id }} </td>
+        <td> {{ restaurant.상호명 }} </td>
+        <td>
+          <form method="post" action="{% url 'walker:purchase' %}">
+            {% csrf_token %}
+            <input type="hidden" name="restaurant_id" value="{{ restaurant.id }}">
+            <button type="submit">구매하기</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+      {% endif %}
+    </tbody>
+  </table> -->
+
+<!-- </div> -->
+{% endblock %}
