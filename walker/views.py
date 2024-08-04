@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator
-from django.http import JsonResponse,HttpResponseRedirect
+from django.http import JsonResponse, HttpResponseRedirect
 from .models import RestaurantInfo, AllUsersOrderList, AllUsersOrderCount, UsersAddress
 from django.contrib.auth.decorators import login_required
 
@@ -13,11 +13,13 @@ temp = None
 
 # Create your views here.
 
+
 def index(request):
     """
     음식점 카테고리
     """
     return render(request, "walker/food_category.html", {})
+
 
 def detail_algorithm(request):
     """
@@ -34,6 +36,7 @@ def detail_algorithm(request):
     context = {"restaurant_list": cfResult_list}
     return render(request, "walker/algorithm_detail.html", context)
 
+
 def detail_one(request):
     """
     카테고리 상세페이지
@@ -47,9 +50,10 @@ def detail_one(request):
     # 페이징처리
     paginator = Paginator(restaurant_list, 14)
     page_obj = paginator.get_page(page)
-    
+
     context = {"restaurant_list": page_obj}
     return render(request, "walker/category_detail.html", context)
+
 
 def detail_two(request):
     """
@@ -64,9 +68,10 @@ def detail_two(request):
     # 페이징처리
     paginator = Paginator(restaurant_list, 14)
     page_obj = paginator.get_page(page)
-    
+
     context = {"restaurant_list": page_obj}
     return render(request, "walker/category_detail.html", context)
+
 
 def detail_three(request):
     """
@@ -81,9 +86,10 @@ def detail_three(request):
     # 페이징처리
     paginator = Paginator(restaurant_list, 14)
     page_obj = paginator.get_page(page)
-    
+
     context = {"restaurant_list": page_obj}
     return render(request, "walker/category_detail.html", context)
+
 
 def detail_four(request):
     """
@@ -98,9 +104,10 @@ def detail_four(request):
     # 페이징처리
     paginator = Paginator(restaurant_list, 14)
     page_obj = paginator.get_page(page)
-    
+
     context = {"restaurant_list": page_obj}
     return render(request, "walker/category_detail.html", context)
+
 
 def detail_five(request):
     """
@@ -115,9 +122,10 @@ def detail_five(request):
     # 페이징처리
     paginator = Paginator(restaurant_list, 14)
     page_obj = paginator.get_page(page)
-    
+
     context = {"restaurant_list": page_obj}
     return render(request, "walker/category_detail.html", context)
+
 
 def detail_six(request):
     """
@@ -132,9 +140,10 @@ def detail_six(request):
     # 페이징처리
     paginator = Paginator(restaurant_list, 14)
     page_obj = paginator.get_page(page)
-    
+
     context = {"restaurant_list": page_obj}
     return render(request, "walker/category_detail.html", context)
+
 
 def detail_seven(request):
     """
@@ -149,9 +158,10 @@ def detail_seven(request):
     # 페이징처리
     paginator = Paginator(restaurant_list, 14)
     page_obj = paginator.get_page(page)
-    
+
     context = {"restaurant_list": page_obj}
     return render(request, "walker/category_detail.html", context)
+
 
 def detail_eight(request):
     """
@@ -166,9 +176,10 @@ def detail_eight(request):
     # 페이징처리
     paginator = Paginator(restaurant_list, 14)
     page_obj = paginator.get_page(page)
-    
+
     context = {"restaurant_list": page_obj}
     return render(request, "walker/category_detail.html", context)
+
 
 def detail_nine(request):
     """
@@ -183,9 +194,10 @@ def detail_nine(request):
     # 페이징처리
     paginator = Paginator(restaurant_list, 14)
     page_obj = paginator.get_page(page)
-    
+
     context = {"restaurant_list": page_obj}
     return render(request, "walker/category_detail.html", context)
+
 
 def detail_ten(request):
     """
@@ -200,9 +212,10 @@ def detail_ten(request):
     # 페이징처리
     paginator = Paginator(restaurant_list, 14)
     page_obj = paginator.get_page(page)
-    
+
     context = {"restaurant_list": page_obj}
     return render(request, "walker/category_detail.html", context)
+
 
 def detail_eleven(request):
     """
@@ -217,14 +230,13 @@ def detail_eleven(request):
     # 페이징처리
     paginator = Paginator(restaurant_list, 14)
     page_obj = paginator.get_page(page)
-    
+
     context = {"restaurant_list": page_obj}
     return render(request, "walker/category_detail.html", context)
 
+
 @login_required(login_url="common:login")
 def purchase(request):
-    
-
 
     if request.method == 'POST':
         # POST 요청 처리
@@ -244,47 +256,49 @@ def purchase(request):
         )
 
         mapping = {
-        '닭/오리요리': '닭오리요리',
-        '별식/퓨전요리': '별식퓨전요리',
-        '부페': '부페',
-        '분식': '분식',
-        '양식': '양식',
-        '일식/수산물': '일식수산물',
-        '제과제빵떡케익': '제과제빵떡케익',
-        '중식': '중식',
-        '커피점/카페': '커피점카페',
-        '패스트푸드': '패스트푸드',
-        '한식': '한식',
+            '닭/오리요리': '닭오리요리',
+            '별식/퓨전요리': '별식퓨전요리',
+            '부페': '부페',
+            '분식': '분식',
+            '양식': '양식',
+            '일식/수산물': '일식수산물',
+            '제과제빵떡케익': '제과제빵떡케익',
+            '중식': '중식',
+            '커피점/카페': '커피점카페',
+            '패스트푸드': '패스트푸드',
+            '한식': '한식',
         }
-        상권업종중분류명 =  restaurant_info.상권업종중분류명
+        상권업종중분류명 = restaurant_info.상권업종중분류명
         column_name = mapping.get(상권업종중분류명)
 
     if column_name:
-        order_count, created = AllUsersOrderCount.objects.get_or_create(user_id=user_id)
-        setattr(order_count, column_name, getattr(order_count, column_name) + 1)
+        order_count, created = AllUsersOrderCount.objects.get_or_create(
+            user_id=user_id)
+        setattr(order_count, column_name, getattr(
+            order_count, column_name) + 1)
         order_count.save()
 
         return HttpResponseRedirect('/walker/')  # 구매 성공 페이지로 리다이렉트
 
     return render(request, 'purchase.html')  # 초기 페이지 렌더링
 
+
 @login_required(login_url="common:login")
 def save_address(request):
     if request.method == 'POST':
         address = request.POST.get('address')
         user_id = request.user.id
-        
+
         # UsersAddress.objects.create(user_id=user_id, address=address)
         obj, created = UsersAddress.objects.get_or_create(user_id=user_id)
 
         if not created:
             obj.address = address
             obj.save()
-        
-        # 필요한 처리나 리디렉션 등 추가 작업 수행
-        
-    return render(request, 'walker/address_form.html', {})
 
+        # 필요한 처리나 리디렉션 등 추가 작업 수행
+
+    return render(request, 'walker/address_form.html', {})
 
     global temp
 
